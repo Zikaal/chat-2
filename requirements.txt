@@ -1,1 +1,8 @@
+streamlit
+langchain
+langchain-community
+llama-index
+pymongo
+faiss-cpu
+pypdf2
 
