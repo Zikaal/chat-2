@@ -1,4 +1,3 @@
-
 import streamlit as st
 import logging
 from langchain_ollama import OllamaLLM
@@ -6,12 +5,12 @@ from sentence_transformers import SentenceTransformer
 from pymongo import MongoClient
 import numpy as np
 import os
-import chardet  # Для определения кодировки файлов
+import chardet  
 
 logging.basicConfig(level=logging.INFO)
 
-# Настройка MongoDB
-mongo_client = MongoClient("mongodb://localhost:27017/")  # Укажите ваш URI MongoDB
+
+mongo_client = MongoClient("mongodb://localhost:27017/")  
 mongo_db = mongo_client["rag_db"]
 collection = mongo_db["documents"]
 
@@ -52,7 +51,7 @@ def query_documents_from_mongodb(query_text, n_results=1):
         query_embedding = embedding(query_text)[0]
         docs = collection.find()
 
-        # Рассчитываем косинусное сходство
+        
         similarities = []
         for doc in docs:
             doc_embedding = np.array(doc["embedding"])
@@ -61,7 +60,7 @@ def query_documents_from_mongodb(query_text, n_results=1):
             )
             similarities.append((similarity, doc))
 
-        # Сортируем и берем топ N результатов
+        
         top_results = sorted(similarities, key=lambda x: x[0], reverse=True)[:n_results]
         return [doc["document"] for _, doc in top_results]
     except Exception as e:
@@ -88,12 +87,8 @@ def retrieve_and_answer(query_text, model_name):
 
 st.title("Chat with Ollama")
 
-model = st.sidebar.selectbox("Choose a model", ["llama3.2:1b"])
-
-if not model:
-    st.warning("Please select a model.")
-
-menu = st.sidebar.selectbox("Choose an action", ["Show Documents in MongoDB", "Add New Document to MongoDB as Vector", "Ask Ollama a Question"])
+model = "llama3.2:1b"
+menu = st.sidebar.selectbox("Choose an action", ["Show Documents in MongoDB", "Add New Document to MongoDB as Vector", "Upload File and Ask Question", "Ask Ollama a Question"])
 
 if menu == "Show Documents in MongoDB":
     st.subheader("Stored Documents in MongoDB")
@@ -112,7 +107,7 @@ elif menu == "Add New Document to MongoDB as Vector":
     if st.button("Add Document"):
         if uploaded_file is not None:
             try:
-                # Определяем кодировку и читаем файл
+                
                 file_bytes = uploaded_file.read()
                 detected_encoding = chardet.detect(file_bytes)['encoding']
                 if not detected_encoding:
@@ -135,6 +130,31 @@ elif menu == "Add New Document to MongoDB as Vector":
                 st.error(f"Failed to add document: {e}")
         else:
             st.warning("Please enter a non-empty document or upload a file before adding.")
+
+elif menu == "Upload File and Ask Question":
+    st.subheader("Upload a file and ask a question about its content")
+    uploaded_file = st.file_uploader("Upload a .txt file", type=["txt"])
+
+    if uploaded_file is not None:
+        try:
+            
+            file_bytes = uploaded_file.read()
+            detected_encoding = chardet.detect(file_bytes)['encoding']
+            if not detected_encoding:
+                raise ValueError("Failed to detect file encoding.")
+            file_content = file_bytes.decode(detected_encoding)
+
+            st.write("File content successfully loaded:")
+            st.text_area("File Content", file_content, height=200)
+
+            question = st.text_input("Ask a question about this file's content:")
+            if question:
+                
+                response = query_with_ollama(f"Context: {file_content}\n\nQuestion: {question}\nAnswer:", model)
+                st.write("Response:", response)
+
+        except Exception as e:
+            st.error(f"Failed to process the file: {e}")
 
 elif menu == "Ask Ollama a Question":
     query = st.text_input("Ask a question")
