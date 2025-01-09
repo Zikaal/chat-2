@@ -11,7 +11,7 @@ This project is a browser-based application that allows users to upload document
 - Storage of user queries and responses in **MongoDB**.
 - **File Uploads:** Attach one or multiple documents simultaneously.
 - **Contextual Q&A:** Ask questions and receive answers based on uploaded document content.
-- **Expandable Format Support:** Works with `.txt` files by default but can be extended to handle other formats.
+- **Expandable Format Support:** Works with `.pdf` files by default but can be extended to handle other formats.
 - **Streamlit Integration:** Browser-based user interface for seamless interaction.
 
 ---
@@ -66,12 +66,12 @@ This project is a browser-based application that allows users to upload document
 ## Examples
 
 ### Example 1:
-- **Uploaded Document:** A `.txt` file containing the project requirements.
+- **Uploaded Document:** A `.pdf` file containing the project requirements.
 - **User Query:** "What is the grading policy?"
 - **Response:** "The grading policy includes 35 points for file attachment functionality, 50 points for context quality, and 15 points for the README."
 
 ### Example 2:
-- **Uploaded Document:** A `.txt` file about artificial intelligence.
+- **Uploaded Document:** A `.pdf` file about artificial intelligence.
 - **User Query:** "What is the importance of AI in modern society?"
 - **Response:** "AI plays a critical role in modern society by automating tasks, improving decision-making, and driving technological innovation."
 
