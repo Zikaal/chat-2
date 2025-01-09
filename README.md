@@ -27,8 +27,8 @@ This project is a browser-based application that allows users to upload document
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/your-username/project-name.git
-   cd project-name
+   git clone https://github.com/Zikaal/chat-2.git
+   cd chat-2
    ```
 
 2. Create a virtual environment:
@@ -52,7 +52,7 @@ This project is a browser-based application that allows users to upload document
 
 1. Run the application:
    ```bash
-   streamlit run src/app.py
+   streamlit run src/chatbot.py
    ```
 
 2. Open your browser at the provided URL.
@@ -84,9 +84,9 @@ project-name/
 ├── README.md            # Documentation
 ├── requirements.txt     # Project dependencies
 ├── src/                 # Source code
-│   ├── app.py               # Main Streamlit application
+│   ├── chatbot.py               # Main Streamlit application
 ├── test/                 
-│   ├── test_app.py          # Test cases for the application
+│   ├── chatbot.py          # Test cases for the application
 └── .gitignore           # Ignored files
 ```
 
