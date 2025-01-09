@@ -1,8 +1,8 @@
 streamlit
-langchain
-langchain-community
-llama-index
 pymongo
-faiss-cpu
-pypdf2
+sentence-transformers
+numpy
+langchain
+chardet
+
 
