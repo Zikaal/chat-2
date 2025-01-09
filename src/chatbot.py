@@ -5,9 +5,10 @@ from sentence_transformers import SentenceTransformer
 from pymongo import MongoClient
 import numpy as np
 import os
-import chardet  # Для определения кодировки файлов
+import chardet  
 
 logging.basicConfig(level=logging.INFO)
+
 
 mongo_client = MongoClient("mongodb://localhost:27017/")  
 mongo_db = mongo_client["rag_db"]
@@ -50,6 +51,7 @@ def query_documents_from_mongodb(query_text, n_results=1):
         query_embedding = embedding(query_text)[0]
         docs = collection.find()
 
+        
         similarities = []
         for doc in docs:
             doc_embedding = np.array(doc["embedding"])
@@ -58,6 +60,7 @@ def query_documents_from_mongodb(query_text, n_results=1):
             )
             similarities.append((similarity, doc))
 
+        
         top_results = sorted(similarities, key=lambda x: x[0], reverse=True)[:n_results]
         return [doc["document"] for _, doc in top_results]
     except Exception as e:
@@ -104,6 +107,7 @@ elif menu == "Add New Document to MongoDB as Vector":
     if st.button("Add Document"):
         if uploaded_file is not None:
             try:
+                
                 file_bytes = uploaded_file.read()
                 detected_encoding = chardet.detect(file_bytes)['encoding']
                 if not detected_encoding:
@@ -133,6 +137,7 @@ elif menu == "Upload File and Ask Question":
 
     if uploaded_file is not None:
         try:
+            
             file_bytes = uploaded_file.read()
             detected_encoding = chardet.detect(file_bytes)['encoding']
             if not detected_encoding:
@@ -144,6 +149,7 @@ elif menu == "Upload File and Ask Question":
 
             question = st.text_input("Ask a question about this file's content:")
             if question:
+                
                 response = query_with_ollama(f"Context: {file_content}\n\nQuestion: {question}\nAnswer:", model)
                 st.write("Response:", response)
 
